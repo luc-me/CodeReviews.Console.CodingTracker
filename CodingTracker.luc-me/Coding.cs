@@ -1,6 +1,3 @@
-using System;
-using System.Runtime.CompilerServices;
-
 namespace CodingTracker.luc_me;
 
 internal class Coding
