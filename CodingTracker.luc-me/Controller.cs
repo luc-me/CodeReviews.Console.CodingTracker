@@ -36,6 +36,7 @@ public class Controller
                     break;
 
             }
+            ui.CleanConsole();
         }
     }
     private void AddSession()
@@ -46,8 +47,11 @@ public class Controller
         do
         {
             startTime = ui.GetTimeInput("\nPlease insert the time you start coding: (Format: H:mm). Type 0 to return main menu.");
+            if (startTime == "0")
+                return;
             endTime = ui.GetTimeInput("\nPlease insert the time you end coding: (Format: H:mm). Type 0 to return main menu.");
-         
+            if (endTime == "0")
+                return;
         }
         while (!ui.TryGetDuration(startTime, endTime, out duration));
         
@@ -58,15 +62,12 @@ public class Controller
         session.Duration = duration;
 
         database.Insert(session);
-
-        ui.CleanConsole();
     }
     private void ViewAll()
     {
         var sessions = database.Get();
         ui.ShowTable(sessions);
 
-        ui.CleanConsole();
     }
 
     private void DeleteSession()
@@ -87,8 +88,11 @@ public class Controller
             {
                 ui.PrintSession(session);
                 session.StartTime = ui.GetTimeInput("\nPlease insert the time you start coding: (Format: H:mm). Type 0 to return main menu.");
+                if (session.StartTime == "0")
+                    return;
                 session.EndTime = ui.GetTimeInput("\nPlease insert the time you end coding: (Format: H:mm). Type 0 to return main menu.");
-            
+                if (session.EndTime == "0")
+                    return;
             }
             while (!ui.TryGetDuration(session.StartTime, session.EndTime, out duration));
 

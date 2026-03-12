@@ -31,19 +31,29 @@ public class UIhandler
     internal string GetTimeInput(string message)
     {
         DateTime timeTemp;
+        bool backMenu=false;
         var time = new TextPrompt<string>(message)
             .DefaultValue(DateTime.UtcNow.ToString("H:mm")).ShowDefaultValue()
             .Validate(time =>
             {
+                if (time=="0")
+                {
+                    backMenu=true;
+                    return ValidationResult.Success();
+                }
                 if (!DateTime.TryParseExact(time,"H:mm", null, DateTimeStyles.None, out timeTemp) || timeTemp > DateTime.UtcNow)
                     return ValidationResult.Error("The time isn't valid");
-                
                 return ValidationResult.Success();
             }
             );
 
+        
         var input = AnsiConsole.Prompt(time);
         
+        if (backMenu)
+        {
+            return "0";
+        }
         AnsiConsole.WriteLine(input);
         return input;
     }
@@ -116,6 +126,7 @@ public class UIhandler
 
     internal void CleanConsole()
     {
+        AnsiConsole.WriteLine("Press a key to continue");
         Console.ReadLine();
         AnsiConsole.Clear();
         Flyer();
